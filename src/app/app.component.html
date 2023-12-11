@@ -9,6 +9,26 @@
   </div>
 
   <div style="margin-top: 10px;">
+    <button type="button" (click)="onAddJob()">Add new JOB</button>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <button type="button" (click)="onDeletJob()">Delete JOB</button>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <button type="button" (click)="onUpdateNetwork()">Update one of the Network</button>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <button type="button" (click)="onAddNetwork()">Add new Network</button>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <button type="button" (click)="onDeletNetwork()">Delete Network</button>
+  </div>
+
+  <div style="margin-top: 10px;">
     {{ownerList$ | async | json}}
   </div>
 </div>

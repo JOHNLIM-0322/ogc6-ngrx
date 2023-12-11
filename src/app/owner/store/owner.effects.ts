@@ -49,4 +49,84 @@ export class OwnerEffects {
       )
     );
   });
+
+  addJob$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromOwnerActions.addJob),
+      switchMap((action) =>
+        this.ownersvc.addJob(action.owners, action.owname, action.nmname, action.newJob).pipe(
+          map((data) => {
+            return fromOwnerActions.addJobSuccess({ owners: data });
+          }),
+          catchError((error) =>
+            of(fromOwnerActions.addJobFailure({ error }))
+          )
+        )
+      )
+    );
+  });
+
+  deleteJob$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromOwnerActions.deleteJob),
+      switchMap((action) =>
+        this.ownersvc.deleteJob(action.owners, action.owname, action.nmname, action.jbname).pipe(
+          map((data) => {
+            return fromOwnerActions.deleteJobSuccess({ owners: data });
+          }),
+          catchError((error) =>
+            of(fromOwnerActions.deleteJobFailure({ error }))
+          )
+        )
+      )
+    );
+  });
+
+  updateNetwork$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromOwnerActions.updateNetwork),
+      switchMap((action) =>
+        this.ownersvc.updateNetwork(action.owners, action.owname, action.nmname, action.updatedNetwork).pipe(
+          map((data) => {
+            return fromOwnerActions.updateNetworkSuccess({ owners: data });
+          }),
+          catchError((error) =>
+            of(fromOwnerActions.updateNetworkFailure({ error }))
+          )
+        )
+      )
+    );
+  });
+
+  addNetwork$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromOwnerActions.addNetwork),
+      switchMap((action) =>
+        this.ownersvc.addNetwork(action.owners, action.owname, action.newNetwork).pipe(
+          map((data) => {
+            return fromOwnerActions.addNetworkSuccess({ owners: data });
+          }),
+          catchError((error) =>
+            of(fromOwnerActions.addNetworkFailure({ error }))
+          )
+        )
+      )
+    );
+  });
+
+  deleteNetwork$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromOwnerActions.deleteNetwork),
+      switchMap((action) =>
+        this.ownersvc.deleteNetwork(action.owners, action.owname, action.nmname).pipe(
+          map((data) => {
+            return fromOwnerActions.deleteNetworkSuccess({ owners: data });
+          }),
+          catchError((error) =>
+            of(fromOwnerActions.deleteNetworkFailure({ error }))
+          )
+        )
+      )
+    );
+  });
 }

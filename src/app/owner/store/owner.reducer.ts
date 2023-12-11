@@ -50,6 +50,36 @@ export const reducer = createReducer(
       owner: adapter.setAll(action.owners, state.owner),
     };
   }),
+  on(OwnerActions.addJobSuccess, (state, action) => {
+    return {
+      ...state,
+      owner: adapter.setAll(action.owners, state.owner),
+    };
+  }),
+  on(OwnerActions.deleteJobSuccess, (state, action) => {
+    return {
+      ...state,
+      owner: adapter.setAll(action.owners, state.owner),
+    };
+  }),
+  on(OwnerActions.updateNetworkSuccess, (state, action) => {
+    return {
+      ...state,
+      owner: adapter.setAll(action.owners, state.owner),
+    };
+  }),
+  on(OwnerActions.addNetworkSuccess, (state, action) => {
+    return {
+      ...state,
+      owner: adapter.setAll(action.owners, state.owner),
+    };
+  }),
+  on(OwnerActions.deleteNetworkSuccess, (state, action) => {
+    return {
+      ...state,
+      owner: adapter.setAll(action.owners, state.owner),
+    };
+  }),
 );
 
 export const {
