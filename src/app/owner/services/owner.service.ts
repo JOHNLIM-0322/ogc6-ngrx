@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Job, NetworkMaster, Owner } from '../model/owner.model';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OwnerService {
+
+    constructor(private httpClient: HttpClient) {
+        
+    }
+
   getOwnerList(): Observable<Owner[]> {
     let ow;
     let nm;
@@ -54,196 +60,50 @@ export class OwnerService {
     return of(owList);
   }
 
-  updateJob(owners: Owner[], owname: string, nmname: string,jbname: string,updatedJob: Job): Observable<Owner[]> {
-    const updatedOwners = owners.map((owner) => {
-      if (owner.name === owname) {
-        const updatedOwner = { ...owner, child: { ...owner.child } };
-        const networkMaster = owner.child.networkMaster.find(
-          (nm) => nm.name === nmname
-        );
-  
-        if (networkMaster) {
-          // found network record
-          const updatedNetworkMaster = {
-            ...networkMaster,
-            child: { ...networkMaster.child, jobMaster: [...networkMaster.child.jobMaster] },
-          };
-  
-          const jobIndex = updatedNetworkMaster.child.jobMaster.findIndex(
-            (jb) => jb.name === jbname
-          );
-  
-          if (jobIndex !== -1) {
-            // found Job record
-            updatedNetworkMaster.child.jobMaster[jobIndex] = updatedJob;
-          } else {
-            console.error(`Job with ${jbname} not found`);
-          }
-  
-          updatedOwner.child.networkMaster = owner.child.networkMaster.map(
-            (nm) => (nm.name === nmname ? updatedNetworkMaster : nm)
-          );
-        } else {
-          console.error(`Network Master with ${nmname} not found`);
-        }
-  
-        return updatedOwner;
-      } else {
-        return owner;
-      }
-    });
-  
-    return of(updatedOwners);
+  updateJob(owname: string, nmname: string,jbname: string, updatedJob: Job) {
+    let resp: any;
+
+    //throw new Error('This is a testing error message');
+    //return this.httpClient.put('http://localhost:3000/', updatedJob);
+    return of(resp);
   }
 
-  addJob(owners: Owner[], owname: string, nmname: string, newJob: Job): Observable<Owner[]> {
-    const updatedOwners = owners.map((owner) => {
-      if (owner.name === owname) {
-        const updatedOwner = { ...owner, child: { ...owner.child } };
-        const networkMaster = owner.child.networkMaster.find((nm) => nm.name === nmname);
-  
-        if (networkMaster) {
-          // Found network master record
-          const updatedNetworkMaster = {
-            ...networkMaster,
-            child: { ...networkMaster.child, jobMaster: [...networkMaster.child.jobMaster, newJob] },
-          };
-  
-          updatedOwner.child.networkMaster = owner.child.networkMaster.map(
-            (nm) => (nm.name === nmname ? updatedNetworkMaster : nm)
-          );
-        } else {
-          console.error(`Network Master with ${nmname} not found`);
-        }
-  
-        return updatedOwner;
-      } else {
-        return owner;
-      }
-    });
-  
-    return of(updatedOwners);
+  addJob(owname: string, nmname: string, newJob: Job) {
+    let resp: any;
+
+    // return this.httpClient.post(....);
+    return of(resp);
   }
 
-  deleteJob(owners: Owner[], owname: string, nmname: string, jbname: string): Observable<Owner[]> {
-    const updatedOwners = owners.map((owner) => {
-      if (owner.name === owname) {
-        const updatedOwner = { ...owner, child: { ...owner.child } };
-        const networkMaster = owner.child.networkMaster.find((nm) => nm.name === nmname);
-  
-        if (networkMaster) {
-          // Found network master record
-          const updatedNetworkMaster = {
-            ...networkMaster,
-            child: { ...networkMaster.child, jobMaster: [...networkMaster.child.jobMaster] },
-          };
-  
-          const jobIndex = updatedNetworkMaster.child.jobMaster.findIndex((jb) => jb.name === jbname);
-  
-          if (jobIndex !== -1) {
-            // Remove the job from the network's jobMaster
-            updatedNetworkMaster.child.jobMaster = [
-              ...updatedNetworkMaster.child.jobMaster.slice(0, jobIndex),
-              ...updatedNetworkMaster.child.jobMaster.slice(jobIndex + 1),
-            ];
-          } else {
-            console.error(`Job with ${jbname} not found`);
-          }
-  
-          updatedOwner.child.networkMaster = owner.child.networkMaster.map(
-            (nm) => (nm.name === nmname ? updatedNetworkMaster : nm)
-          );
-        } else {
-          console.error(`Network Master with ${nmname} not found`);
-        }
-  
-        return updatedOwner;
-      } else {
-        return owner;
-      }
-    });
-  
-    return of(updatedOwners);
-  }  
-  
-  updateNetwork(owners: Owner[], owname: string, nmname: string, updatedNetwork: NetworkMaster): Observable<Owner[]> {
-    const updatedOwners = owners.map((owner) => {
-      if (owner.name === owname) {
-        const updatedOwner = { ...owner, child: { ...owner.child } };
-        const networkMaster = owner.child.networkMaster.find((nm) => nm.name === nmname);
-  
-        if (networkMaster) {
-          // Found network master record
-          const updatedNetworkMaster = {
-            ...networkMaster,
-            ...updatedNetwork,
-            child: { ...networkMaster.child, jobMaster: [...networkMaster.child.jobMaster] },
-          };
-  
-          updatedOwner.child.networkMaster = owner.child.networkMaster.map(
-            (nm) => (nm.name === nmname ? updatedNetworkMaster : nm)
-          );
-        } else {
-          console.error(`Network Master with ${nmname} not found`);
-        }
-  
-        return updatedOwner;
-      } else {
-        return owner;
-      }
-    });
-  
-    return of(updatedOwners);
+  deleteJob(owname: string, nmname: string, jbname: string) {
+    let resp: any;
+
+    // return this.httpClient.delete(....);
+    return of(resp);
   }
 
-  addNetwork(owners: Owner[], owname: string, newNetwork: NetworkMaster): Observable<Owner[]> {
-    const updatedOwners = owners.map((owner) => {
-      if (owner.name === owname) {
-        const updatedOwner = { ...owner, child: { ...owner.child } };
+  updateNetwork(owname: string, nmname: string, updatedNetwork: NetworkMaster) {
+    let resp: any;
+
+    // return this.httpClient.put(....);
+    return of(resp);
+  }
   
-        // Check if the network name already exists
-        const networkExists = owner.child.networkMaster.some((nm) => nm.name === newNetwork.name);
+  addNetwork(owname: string, newNetwork: NetworkMaster) {
+    let resp: any;
+
+    // return this.httpClient.post(....);
+    return of(resp);
+  }
   
-        if (!networkExists) {
-          // If the network doesn't exist, add it to the owner's networks
-          updatedOwner.child.networkMaster = [...owner.child.networkMaster, { ...newNetwork, child: { jobMaster: [] } }];
-        } else {
-          console.error(`Network with ${newNetwork.name} already exists`);
-        }
-  
-        return updatedOwner;
-      } else {
-        return owner;
-      }
-    });
-  
-    return of(updatedOwners);
+  deleteNetwork(owname: string, nmname: string) {
+    let resp: any;
+
+    // return this.httpClient.delete(....);
+    return of(resp);
   }
 
-  deleteNetwork(owners: Owner[], owname: string, nmname: string): Observable<Owner[]> {
-    const updatedOwners = owners.map((owner) => {
-      if (owner.name === owname) {
-        const updatedOwner = { ...owner, child: { ...owner.child } };
-        const networkMasterIndex = owner.child.networkMaster.findIndex((nm) => nm.name === nmname);
-  
-        if (networkMasterIndex !== -1) {
-          // Remove the network from the owner's networks
-          updatedOwner.child.networkMaster = [
-            ...owner.child.networkMaster.slice(0, networkMasterIndex),
-            ...owner.child.networkMaster.slice(networkMasterIndex + 1),
-          ];
-        } else {
-          console.error(`Network Master with ${nmname} not found`);
-        }
-  
-        return updatedOwner;
-      } else {
-        return owner;
-      }
-    });
-  
-    return of(updatedOwners);
-  }
+ 
   
   
   

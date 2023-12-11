@@ -75,6 +75,7 @@ export const reducer = createReducer(
     };
   }),
   on(OwnerActions.deleteNetworkSuccess, (state, action) => {
+
     return {
       ...state,
       owner: adapter.setAll(action.owners, state.owner),

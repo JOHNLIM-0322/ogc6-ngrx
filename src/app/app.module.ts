@@ -12,6 +12,7 @@ import { AppEffects } from './store/app.effects';
 import * as fromApp from './store/app.reducer';
 import { reducers, metaReducers } from './store';
 import { OwnerEffects } from './owner/store/owner.effects';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { OwnerEffects } from './owner/store/owner.effects';
   imports: [
     BrowserModule,
     AppRoutingModule,
-
+    HttpClientModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {

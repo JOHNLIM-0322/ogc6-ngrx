@@ -7,6 +7,8 @@ import * as fromOwnerActions from './owner/store/owner.actions';
 import * as fromOwnerSelectors from './owner/store/owner.selectors';
 import { Store } from '@ngrx/store';
 import { OwnerService } from './owner/services/owner.service';
+import { OwnerData } from './owner/data/owner.data';
+import { OwnerDataError } from './owner/data/owner.data.error';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +23,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private store: Store<fromOwnerReducers.OwnerState>,
+    private ownerData: OwnerData,
     private ownerSvc: OwnerService
   ) {}
 
@@ -54,12 +57,19 @@ export class AppComponent implements OnInit {
     updatedJob.specialType = { key: 'update_specialtype_key', value: 'update specialtype'};
     updatedJob.type = { key: 'update_type_key', value: 'update type'};
 
-    this.store.dispatch(fromOwnerActions.updateJob( {owners: this.ownerList, 
-                                                      owname: owname, 
-                                                      nmname: nmname, 
-                                                      jbname: jbname, 
-                                                      updatedJob: updatedJob }));
-                                                      
+    try {
+      const updatedOwnerList = this.ownerData.updateJob(this.ownerList, owname, nmname, jbname, updatedJob);
+
+      this.store.dispatch(fromOwnerActions.updateJob({ owners: updatedOwnerList, owname: owname, nmname: nmname, jbname: jbname, updatedJob: updatedJob}));
+
+    }catch (error) {
+      if (error instanceof OwnerDataError) {
+        console.error('Update job error:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+                                                     
     // at this point, ownerList$ is updated
     // -- if didn't add OwnerActions.updateJobSuccess in reducer, ownerList$ will not be updated
                                                 
@@ -79,7 +89,18 @@ export class AppComponent implements OnInit {
     newJob.specialType = { key: 'newJob_specialtype_key', value: 'newJob specialtype'};
     newJob.type = { key: 'newJob_type_key', value: 'newJob type'};
 
-    this.store.dispatch(fromOwnerActions.addJob( { owners: this.ownerList, owname: owname, nmname: nmname, newJob: newJob}));
+    try{
+      const updatedOwnerList = this.ownerData.addJob(this.ownerList, owname, nmname, newJob);
+      this.store.dispatch(fromOwnerActions.addJob({ owners: updatedOwnerList, owname: owname, nmname: nmname, newJob: newJob}));
+    }catch (error) {
+      if (error instanceof OwnerDataError) {
+        console.error('Add job error:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+
+    //this.store.dispatch(fromOwnerActions.addJob( { owners: this.ownerList, owname: owname, nmname: nmname, newJob: newJob}));
   }
 
   onDeletJob() {
@@ -87,7 +108,18 @@ export class AppComponent implements OnInit {
     let nmname: string = 'OWNER1-NETWORK2';
     let jbname: string = 'OWNER1-NETWORK2-JOB3';
 
-    this.store.dispatch(fromOwnerActions.deleteJob( { owners: this.ownerList, owname: owname, nmname: nmname, jbname: jbname}));
+    try{
+      const updatedOwnerList = this.ownerData.deleteJob(this.ownerList, owname, nmname, jbname);
+      this.store.dispatch(fromOwnerActions.deleteJob({ owners: updatedOwnerList, owname: owname, nmname: nmname, jbname: jbname}));
+    }catch (error) {
+      if (error instanceof OwnerDataError) {
+        console.error('Delete job error:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+
+    //this.store.dispatch(fromOwnerActions.deleteJob( { owners: this.ownerList, owname: owname, nmname: nmname, jbname: jbname}));
   }
 
   onUpdateNetwork() {
@@ -100,7 +132,17 @@ export class AppComponent implements OnInit {
     updatedNetwork.loop = 99;
     updatedNetwork.node = 'updated network node';
 
-    this.store.dispatch(fromOwnerActions.updateNetwork( { owners: this.ownerList, owname: owname, nmname: nmname, updatedNetwork: updatedNetwork}));
+    try{
+      const updatedOwnerList = this.ownerData.updateNetwork(this.ownerList, owname, nmname, updatedNetwork);
+      this.store.dispatch(fromOwnerActions.updateNetwork({ owners: updatedOwnerList, owname: owname, nmname: nmname, updatedNetwork: updatedNetwork}));
+    }catch (error) {
+      if (error instanceof OwnerDataError) {
+        console.error('Update network error:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+    //this.store.dispatch(fromOwnerActions.updateNetwork( { owners: this.ownerList, owname: owname, nmname: nmname, updatedNetwork: updatedNetwork}));
   }
 
   onAddNetwork() {
@@ -113,13 +155,35 @@ export class AppComponent implements OnInit {
     newNetwork.loop = 99;
     newNetwork.node = 'new network node';
 
-    this.store.dispatch(fromOwnerActions.addNetwork( { owners: this.ownerList, owname: owname, newNetwork: newNetwork}));
+    try{
+      const updatedOwnerList = this.ownerData.addNetwork(this.ownerList, owname, newNetwork);
+      this.store.dispatch(fromOwnerActions.addNetwork({ owners: updatedOwnerList, owname: owname, newNetwork: newNetwork}));
+    }catch (error) {
+      if (error instanceof OwnerDataError) {
+        console.error('Add network error:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+
+    //this.store.dispatch(fromOwnerActions.addNetwork( { owners: this.ownerList, owname: owname, newNetwork: newNetwork}));
   }
 
   onDeletNetwork() {
     let owname: string = 'OWNER1';
     let nmname: string = 'OWNER1-NETWORK2';
 
-    this.store.dispatch(fromOwnerActions.deleteNetwork( { owners: this.ownerList, owname: owname, nmname: nmname }));
+    try{
+      const updatedOwnerList = this.ownerData.deleteNetwork(this.ownerList, owname, nmname);
+      this.store.dispatch(fromOwnerActions.deleteNetwork({ owners: updatedOwnerList, owname: owname, nmname: nmname}));
+    }catch (error) {
+      if (error instanceof OwnerDataError) {
+        console.error('Delete network error:', error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+
+    //this.store.dispatch(fromOwnerActions.deleteNetwork( { owners: this.ownerList, owname: owname, nmname: nmname }));
   }
 }
