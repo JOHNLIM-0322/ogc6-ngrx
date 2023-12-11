@@ -1,0 +1,7 @@
+export enum LOADING_STATUS {
+    START = 'START',
+    LOADING = 'LOADING',
+    SUCCESS = 'SUCCESS',
+    FAILURE = 'FAILURE',
+    ERROR = 'ERROR',
+}
